@@ -33,11 +33,11 @@ def extract_features(time_series_sample):
     return np.concatenate([f_mean, f_std, f_min, f_max, f_median], axis=0)
 
 # --- VAD 로직이 포함된 데이터 로더 ---
-def load_and_preprocess_resampled(csv_file, wav_file, target_fs=100.0, vad_top_db=25):
+def load_and_preprocess_resampled(csv_file, wav_file, target_fs=100.0, vad_top_db=30):
     try:
         # 1. 오디오(WAV)로 VAD 수행 -> 시작/종료 시간 획득
         audio, sr = librosa.load(wav_file, sr=None)
-        # top_db=25: 조용한 부분(평균-25dB)을 침묵으로 간주하고 잘라냄 (환경에 따라 조절)
+        # top_db=30: 조용한 부분(평균-30dB)을 침묵으로 간주하고 잘라냄 (환경에 따라 조절)
         audio_trimmed, index = librosa.effects.trim(audio, top_db=vad_top_db)
         
         if len(index) == 0: # 오디오가 비어있으면 스킵
